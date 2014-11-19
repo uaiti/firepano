@@ -32,3 +32,5 @@ License
 sha256.js is part of [CryptoJS](http://code.google.com/p/crypto-js/) which
 is distributed under the terms of
 [this license](http://code.google.com/p/crypto-js/wiki/License) (BSD 3-clause).
+
+
