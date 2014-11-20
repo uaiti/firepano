@@ -6,16 +6,26 @@ function handleFileSelect(evt) {
   var reader = new FileReader();
   reader.onload = (function(theFile) {
     return function(e) {
-      var filePayload = e.target.result;
+      var filePayload = e.target.result;  
+  
       // Generate a location that can't be guessed using the file's contents and a random number
       var hash = CryptoJS.SHA256(Math.random() + CryptoJS.SHA256(filePayload));
       var f = new Firebase(firebaseRef + 'pano/' + hash + '/filePayload');
       spinner.spin(document.getElementById('spin'));
       // Set the file payload to Firebase and register an onComplete handler to stop the spinner and show the preview
       f.set(filePayload, function() { 
-        spinner.stop();
-        document.getElementById("pano").src = e.target.result;
-        $('#file-upload').hide();
+        spinner.stop(); 
+  if (filePayload.indexOf('data:image') !== -1){      
+    document.getElementById("pano").src = e.target.result;
+    $('#pano-audio').hide();
+    $('#pano').show();
+  }else if(filePayload.indexOf('data:audio') !== -1){       
+
+      document.getElementById("pano-audio").src = e.target.result;
+    $('#pano').hide();
+    $('#pano-audio').show();
+  };
+  
         // Update the location bar so the URL can be shared with others
         window.location.hash = hash;
       });
@@ -23,6 +33,7 @@ function handleFileSelect(evt) {
   })(f);
   reader.readAsDataURL(f);
 }
+
 
 $(function() {
   $('#spin').append(spinner);
